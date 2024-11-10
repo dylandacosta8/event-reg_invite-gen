@@ -78,6 +78,6 @@ jobs:
         with:
           image-ref: 'dylan08/is601_final:${{ github.sha }}'
           format: 'table'
-          exit-code: '0' # Fail the job if vulnerabilities are found
+          exit-code: '0' # Pass the job if vulnerabilities are found
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
