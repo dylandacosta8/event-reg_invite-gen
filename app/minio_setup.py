@@ -7,15 +7,15 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize Minio client using the configuration from settings
+minio_client = Minio(
+    settings.minio_url,
+    access_key=settings.minio_access_key,
+    secret_key=settings.minio_secret_key,
+    secure=False  # Set to True if using HTTPS
+)
+
 def create_minio_bucket():
-    """Create a bucket in Minio for storing QR codes."""
-    # Initialize Minio client using the configuration from settings
-    minio_client = Minio(
-        settings.minio_url,
-        access_key=settings.minio_access_key,
-        secret_key=settings.minio_secret_key,
-        secure=False  # Set to True if using HTTPS
-    )
     
     # Define the bucket name from settings
     bucket_name = settings.minio_bucket
