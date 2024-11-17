@@ -25,6 +25,7 @@ from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import text
 from faker import Faker
 
 # Application-specific imports
@@ -75,11 +76,27 @@ def initialize_database():
 @pytest.fixture(scope="function", autouse=True)
 async def setup_database():
     async with engine.begin() as conn:
+        # Create all tables
         await conn.run_sync(Base.metadata.create_all)
     yield
     async with engine.begin() as conn:
-        # you can comment out this line during development if you are debugging a single test
-         await conn.run_sync(Base.metadata.drop_all)
+        # Drop all tables in reverse dependency order
+        # Check for and drop the 'invitations' table if it exists
+        result = await conn.execute(text("SELECT to_regclass('public.invitations')"))
+        invitations_exists = result.scalar() is not None
+
+        if invitations_exists:
+            # Drop the foreign key constraint on 'invitations'
+            await conn.execute(text('ALTER TABLE invitations DROP CONSTRAINT IF EXISTS invitations_user_id_fkey'))
+            await conn.execute(text('DROP TABLE IF EXISTS invitations CASCADE'))
+        
+        # Check for and drop the 'users' table
+        result = await conn.execute(text("SELECT to_regclass('public.users')"))
+        users_exists = result.scalar() is not None
+
+        if users_exists:
+            await conn.execute(text('DROP TABLE IF EXISTS users CASCADE'))
+    # Dispose of the engine connection
     await engine.dispose()
 
 @pytest.fixture(scope="function")
