@@ -24,8 +24,11 @@ def upgrade() -> None:
         'invitations',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('invite_code', sa.String(), nullable=False),
-        sa.Column('user_id', sa.UUID(), sa.ForeignKey('users.id'), nullable=False),
-        sa.Column('used', sa.Boolean(), nullable=False, default=False),
+        sa.Column('user_id', sa.dialects.postgresql.UUID(as_uuid=True), sa.ForeignKey('users.id', ondelete='SET NULL'), nullable=True),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.text("timezone('utc', now())")),
+        sa.Column('used', sa.Boolean(), nullable=False, server_default=sa.text('false')),
+        sa.Column('used_at', sa.DateTime(timezone=True), nullable=True),
+        sa.Column('nickname', sa.String(), nullable=False),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('invite_code'),
     )
