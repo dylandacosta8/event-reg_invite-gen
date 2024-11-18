@@ -48,6 +48,9 @@ services:
     build: .
     volumes:
       - ./:/myapp/
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
     depends_on:
       postgres:
           condition: service_healthy

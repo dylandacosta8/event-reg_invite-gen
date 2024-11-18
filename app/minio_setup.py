@@ -2,6 +2,7 @@ from minio import Minio
 from minio.error import S3Error
 from settings.config import settings
 import logging
+import os
 
 # Initialize logger
 logging.basicConfig(level=logging.INFO)
@@ -10,9 +11,9 @@ logger = logging.getLogger(__name__)
 # Initialize Minio client using the configuration from settings
 minio_client = Minio(
     settings.minio_url,
-    access_key=settings.minio_access_key,
-    secret_key=settings.minio_secret_key,
-    secure=False  # Set to True if using HTTPS
+    access_key=os.environ.get("MINIO_ROOT_USER"),
+    secret_key=os.environ.get("MINIO_ROOT_PASSWORD"),
+    secure=False
 )
 
 def create_minio_bucket():
