@@ -42,8 +42,6 @@ class Settings(BaseSettings):
     smtp_password: str = Field(default='your-mailtrap-password', description="Password for SMTP server")
     # Minio configuration
     minio_url: str = Field(default='http://localhost:9000', description="Minio server URL")
-    minio_access_key: str = Field(default='youraccesskey', description="Minio access key")
-    minio_secret_key: str = Field(default='yoursecretkey', description="Minio secret key")
     minio_bucket: str = Field(default='qr-codes', description="Bucket name for storing QR codes")
 
     class Config:
