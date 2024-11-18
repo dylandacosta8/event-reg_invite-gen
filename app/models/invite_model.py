@@ -9,6 +9,7 @@ class Invitation(Base):
     __tablename__ = 'invitations'
 
     id: Mapped[int] = Column(Integer, primary_key=True, index=True)
+    invitee_email: Mapped[str] = Column(String(255), unique=True, nullable=False, index=True)
     invite_code: Mapped[str] = Column(String, unique=True, index=True)
     user_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     created_at: Mapped[datetime] = Column(DateTime, default=lambda: datetime.now(timezone.utc))

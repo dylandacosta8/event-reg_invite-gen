@@ -23,6 +23,7 @@ def upgrade() -> None:
     op.create_table(
         'invitations',
         sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('invitee_email', sa.String(length=255), nullable=False),
         sa.Column('invite_code', sa.String(), nullable=False),
         sa.Column('user_id', sa.dialects.postgresql.UUID(as_uuid=True), sa.ForeignKey('users.id', ondelete='SET NULL'), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.text("timezone('utc', now())")),
