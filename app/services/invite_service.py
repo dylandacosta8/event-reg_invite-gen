@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import update, select, func
+from sqlalchemy.orm import joinedload
 from uuid import UUID
 from app.models.invite_model import Invitation
-from app.schemas.invite_schemas import InviteCreate, InviteUpdate
 from app.services.email_service import EmailService
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -150,3 +150,33 @@ class InviteService:
         except Exception as e:
             logger.error(f"Error resending invitation: {e}")
             return False
+
+    @classmethod
+    async def update_invite(cls, session: AsyncSession, invite_id: UUID, update_data: dict) -> Optional[Invitation]:
+        """
+        Update an invitation by its ID.
+        :param session: Database session.
+        :param invite_id: The ID of the invitation to update.
+        :param update_data: A dictionary of fields to update.
+        :return: The updated Invitation object or None if not found.
+        """
+        try:
+            # Retrieve the invitation to be updated
+            query = select(Invitation).where(Invitation.id == invite_id).options(joinedload('*'))
+            result = await session.execute(query)
+            invitation = result.scalars().first()
+
+            if not invitation:
+                return None
+
+            # Update fields dynamically
+            for field, value in update_data.items():
+                setattr(invitation, field, value)
+
+            await session.commit()  # Commit the transaction
+            await session.refresh(invitation)  # Refresh the instance to reflect updates
+            return invitation
+        except Exception as e:
+            logger.error(f"Error updating invitation with ID {invite_id}: {e}")
+            await session.rollback()
+            return None
