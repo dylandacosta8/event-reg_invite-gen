@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update, select, func
+from sqlalchemy import update, select, func, and_
 from sqlalchemy.orm import joinedload
 from uuid import UUID
 from app.models.invite_model import Invitation
@@ -131,24 +131,33 @@ class InviteService:
         return invites, total
 
     @classmethod
-    async def resend_invitation(cls, session: AsyncSession, invite_id: int, email_service: EmailService) -> bool:
+    async def resend_invitation(cls, session: AsyncSession, invite_id: UUID, user_id: UUID, email_service: EmailService) -> bool:
         """
         Resend an existing invitation email.
         :param session: Database session.
         :param invite_id: ID of the invitation to resend.
+        :param user_id: ID of the user who owns the invitation.
         :param email_service: EmailService instance for sending emails.
         :return: True if successful, False otherwise.
         """
-        invitation = await session.get(Invitation, invite_id)
-        if not invitation:
-            logger.error(f"Invitation with ID {invite_id} not found.")
-            return False
-
         try:
+            # Query the invitation
+            query = select(Invitation).where(
+                and_(Invitation.user_id == user_id, Invitation.id == invite_id)
+            )
+            result = await cls._execute_query(session, query)
+            invitation = result.scalars().first()
+
+            if not invitation:
+                logger.error(f"Invitation with ID {invite_id} not found or does not belong to user {user_id}.")
+                return False
+
+            # Resend the invitation email
             await email_service.send_invite_email(invitation)
             return True
+
         except Exception as e:
-            logger.error(f"Error resending invitation: {e}")
+            logger.error(f"Error resending invitation for ID {invite_id}: {e}")
             return False
 
     @classmethod
