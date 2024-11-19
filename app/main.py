@@ -40,7 +40,7 @@ async def startup_event():
 async def exception_handler(request, exc):
     return JSONResponse(status_code=500, content={"message": "An unexpected error occurred."})
 
-@app.get("/accepted", response_class=HTMLResponse)
+@app.get("/accepted",include_in_schema=False, response_class=HTMLResponse)
 async def verified_page():
     # Return an HTML response with the message
     html_content = """
