@@ -78,9 +78,9 @@ async def list_invites(
     """
     List all invitations created by the current user.
     """
-    invites, total = await InviteService.list_user_invites(
-        db=db,
-        user_id=current_user.id,
+    invites, total = await InviteService.list_invitations_for_user(
+        session=db,
+        user_id=current_user["user_uuid"],
         skip=skip,
         limit=limit
     )

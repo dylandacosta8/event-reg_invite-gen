@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update, select
+from sqlalchemy import update, select, func
 from uuid import UUID
 from app.models.invite_model import Invitation
 from app.schemas.invite_schemas import InviteCreate, InviteUpdate
@@ -109,18 +109,26 @@ class InviteService:
             return False
 
     @classmethod
-    async def list_invitations_for_user(cls, session: AsyncSession, user_id: UUID, skip: int = 0, limit: int = 10) -> List[Invitation]:
+    async def list_invitations_for_user(cls, session: AsyncSession, user_id: UUID, skip: int = 0, limit: int = 10):
         """
-        List all invitations created by a specific user.
+        List all invitations created by a specific user along with the total count.
         :param session: Database session.
         :param user_id: ID of the user.
         :param skip: Number of records to skip (pagination).
         :param limit: Maximum number of records to return (pagination).
-        :return: List of Invitation objects.
+        :return: A tuple containing the list of invitations and the total count.
         """
+        # Query to fetch invitations
         query = select(Invitation).where(Invitation.user_id == user_id).offset(skip).limit(limit)
         result = await cls._execute_query(session, query)
-        return result.scalars().all() if result else []
+        invites = result.scalars().all() if result else []
+
+        # Query to count total invitations
+        total_query = select(func.count(Invitation.id)).where(Invitation.user_id == user_id)
+        total_result = await session.execute(total_query)
+        total = total_result.scalar() or 0
+
+        return invites, total
 
     @classmethod
     async def resend_invitation(cls, session: AsyncSession, invite_id: int, email_service: EmailService) -> bool:
