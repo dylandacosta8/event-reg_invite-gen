@@ -9,7 +9,6 @@ class InviteCreate(BaseModel):
 
 class InviteUpdate(BaseModel):
     invitee_email: Optional[EmailStr] = Field(None, example="invitee@example.com")
-    nickname: Optional[str] = Field(None, example="NewNickname")
 
 class InviteResponse(BaseModel):
     id: UUID
