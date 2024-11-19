@@ -161,7 +161,7 @@ class InviteService:
             return False
 
     @classmethod
-    async def update_invite(cls, session: AsyncSession, invite_id: UUID, update_data: dict) -> Optional[Invitation]:
+    async def update_invite(cls, session: AsyncSession, invite_id: UUID, user_id: UUID, update_data: dict) -> Optional[Invitation]:
         """
         Update an invitation by its ID.
         :param session: Database session.
@@ -171,7 +171,7 @@ class InviteService:
         """
         try:
             # Retrieve the invitation to be updated
-            query = select(Invitation).where(Invitation.id == invite_id).options(joinedload('*'))
+            query = select(Invitation).where(and_(Invitation.id == invite_id, Invitation.user_id == user_id)).options(joinedload('*'))
             result = await session.execute(query)
             invitation = result.scalars().first()
 

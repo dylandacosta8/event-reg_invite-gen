@@ -40,7 +40,8 @@ async def create_invite(
 async def update_invite(
     invite_id: UUID,
     invite_data: InviteUpdate,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     """
     Update an invitation by ID.
@@ -48,7 +49,8 @@ async def update_invite(
     updated_invite = await InviteService.update_invite(
         session=db,
         invite_id=invite_id,
-        update_data=invite_data.dict(exclude_unset=True)
+        update_data=invite_data.dict(exclude_unset=True),
+        user_id=current_user["user_uuid"]
     )
     if not updated_invite:
         raise HTTPException(status_code=404, detail="Invitation not found.")
