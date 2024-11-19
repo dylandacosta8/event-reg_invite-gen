@@ -87,21 +87,7 @@ async def list_invites(
     )
     return InviteListResponse(items=invites, total=total, page=skip // limit + 1, size=limit)
 
-
-@router.get("/invites/validate/{invite_code}", response_model=bool, name="validate_invite_code", tags=["Invitations"])
-async def validate_invite_code(
-    invite_code: str,
-    db: AsyncSession = Depends(get_db)
-):
-    """
-    Validate an invitation code.
-    """
-    is_valid = await InviteService.validate_invite_code(db=db, invite_code=invite_code)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail="Invalid or expired invitation code.")
-    return True
-
-@router.get("/accept", name="accept_invite", tags=["Invitations"])
+@router.get("/accept",include_in_schema=False, name="accept_invite", tags=["Invitations"])
 async def accept_invite(
     nickname: str,
     invite_code: str,
@@ -136,3 +122,23 @@ async def accept_invite(
     except Exception as e:
         # Handle errors and provide a meaningful response
         raise HTTPException(status_code=400, detail=f"Error processing invitation: {e}")
+    
+@router.post("/invites/resend/{invite_id}", name="resend_invite", tags=["Invitations"])
+async def resend_invitation(
+    invite_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    email_service: EmailService = Depends(get_email_service),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Resend an existing invitation email by its ID.
+    """
+    success = await InviteService.resend_invitation(
+        session=db,
+        invite_id=invite_id,
+        email_service=email_service,
+        user_id= current_user["user_uuid"]
+    )
+    if not success:
+        raise HTTPException(status_code=404, detail="Invitation not found or could not be resent.")
+    return {"message": "Invitation resent successfully."}
