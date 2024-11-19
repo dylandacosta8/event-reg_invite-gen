@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     # Server configuration
     server_base_url: AnyUrl = Field(default='http://localhost', description="Base URL of the server")
     server_download_folder: str = Field(default='downloads', description="Folder for storing downloaded files")
-
+    redirect_base_url: AnyUrl = Field(default='http://localhost/accepted')
     # Security and authentication configuration
     secret_key: str = Field(default="secret-key", description="Secret key for encryption")
     algorithm: str = Field(default="HS256", description="Algorithm used for encryption")
@@ -42,8 +42,6 @@ class Settings(BaseSettings):
     smtp_password: str = Field(default='your-mailtrap-password', description="Password for SMTP server")
     # Minio configuration
     minio_url: str = Field(default='http://localhost:9000', description="Minio server URL")
-    minio_access_key: str = Field(default='youraccesskey', description="Minio access key")
-    minio_secret_key: str = Field(default='yoursecretkey', description="Minio secret key")
     minio_bucket: str = Field(default='qr-codes', description="Bucket name for storing QR codes")
 
     class Config:
