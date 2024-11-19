@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16.2
@@ -30,13 +28,32 @@ services:
     networks:
       - app-network
 
+  minio:
+    image: quay.io/minio/minio
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    depends_on:
+      - pgadmin
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+
   fastapi:
     build: .
     volumes:
       - ./:/myapp/
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
     depends_on:
       postgres:
-        condition: service_healthy
+          condition: service_healthy
     networks:
       - app-network
 
@@ -54,6 +71,7 @@ services:
 volumes:
   postgres-data:
   pgadmin-data:
+  minio-data:
 
 networks:
   app-network:

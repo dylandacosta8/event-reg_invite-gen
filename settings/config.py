@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     # Server configuration
     server_base_url: AnyUrl = Field(default='http://localhost', description="Base URL of the server")
     server_download_folder: str = Field(default='downloads', description="Folder for storing downloaded files")
-
+    redirect_base_url: AnyUrl = Field(default='http://localhost/accepted')
     # Security and authentication configuration
     secret_key: str = Field(default="secret-key", description="Secret key for encryption")
     algorithm: str = Field(default="HS256", description="Algorithm used for encryption")
@@ -40,7 +40,9 @@ class Settings(BaseSettings):
     smtp_port: int = Field(default=2525, description="SMTP port for sending emails")
     smtp_username: str = Field(default='your-mailtrap-username', description="Username for SMTP server")
     smtp_password: str = Field(default='your-mailtrap-password', description="Password for SMTP server")
-
+    # Minio configuration
+    minio_url: str = Field(default='http://localhost:9000', description="Minio server URL")
+    minio_bucket: str = Field(default='qr-codes', description="Bucket name for storing QR codes")
 
     class Config:
         # If your .env file is not in the root directory, adjust the path accordingly.
