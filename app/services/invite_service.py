@@ -76,14 +76,14 @@ class InviteService:
             return None
 
     @classmethod
-    async def get_invitation_by_code(cls, session: AsyncSession, invite_code: str) -> Optional[Invitation]:
+    async def get_invitation_by_code(cls, session: AsyncSession, invite_code: str, user_id: UUID) -> Optional[Invitation]:
         """
         Retrieve an invitation by its unique invite code.
         :param session: Database session.
         :param invite_code: Unique invite code.
         :return: Invitation object or None.
         """
-        query = select(Invitation).where(Invitation.invite_code == invite_code)
+        query = select(Invitation).where(and_(Invitation.invite_code == invite_code, Invitation.user_id == user_id))
         result = await cls._execute_query(session, query)
         return result.scalars().first() if result else None
 

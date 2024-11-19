@@ -13,7 +13,7 @@ from uuid import UUID
 router = APIRouter()
 
 
-@router.post("/invites/", response_model=InviteResponse, status_code=201, name="create_invite", tags=["Invitations"])
+@router.post("/invites/", response_model=InviteResponse, status_code=201, name="create_invite", tags=["Invitations with MinIO (Authentication Required)"])
 async def create_invite(
     invite_data: InviteCreate,
     db: AsyncSession = Depends(get_db),
@@ -36,7 +36,7 @@ async def create_invite(
     return new_invite
 
 
-@router.put("/invites/{invite_id}", response_model=InviteResponse, name="update_invite", tags=["Invitations"])
+@router.put("/invites/{invite_id}", response_model=InviteResponse, name="update_invite", tags=["Invitations with MinIO (Authentication Required)"])
 async def update_invite(
     invite_id: UUID,
     invite_data: InviteUpdate,
@@ -57,21 +57,22 @@ async def update_invite(
     return updated_invite
 
 
-@router.get("/invites/{invite_code}", response_model=InviteResponse, name="get_invite_by_code", tags=["Invitations"])
+@router.get("/invites/{invite_code}", response_model=InviteResponse, name="get_invite_by_code", tags=["Invitations with MinIO (Authentication Required)"])
 async def get_invite_by_code(
     invite_code: str,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     """
     Retrieve an invitation by its invite code.
     """
-    invite = await InviteService.get_invitation_by_code(session=db, invite_code=invite_code)
+    invite = await InviteService.get_invitation_by_code(session=db, invite_code=invite_code, user_id=current_user["user_uuid"])
     if not invite:
         raise HTTPException(status_code=404, detail="Invitation not found.")
     return invite
 
 
-@router.get("/invites/", response_model=InviteListResponse, name="list_invites", tags=["Invitations"])
+@router.get("/invites/", response_model=InviteListResponse, name="list_invites", tags=["Invitations with MinIO (Authentication Required)"])
 async def list_invites(
     skip: int = 0,
     limit: int = 10,
@@ -89,7 +90,7 @@ async def list_invites(
     )
     return InviteListResponse(items=invites, total=total, page=skip // limit + 1, size=limit)
 
-@router.get("/accept",include_in_schema=False, name="accept_invite", tags=["Invitations"])
+@router.get("/accept",include_in_schema=False, name="accept_invite", tags=["Invitations with MinIO (Authentication Required)"])
 async def accept_invite(
     nickname: str,
     invite_code: str,
@@ -125,7 +126,7 @@ async def accept_invite(
         # Handle errors and provide a meaningful response
         raise HTTPException(status_code=400, detail=f"Error processing invitation: {e}")
     
-@router.post("/invites/resend/{invite_id}", name="resend_invite", tags=["Invitations"])
+@router.post("/invites/resend/{invite_id}", name="resend_invite", tags=["Invitations with MinIO (Authentication Required)"])
 async def resend_invitation(
     invite_id: UUID,
     db: AsyncSession = Depends(get_db),
@@ -145,7 +146,7 @@ async def resend_invitation(
         raise HTTPException(status_code=404, detail="Invitation not found or could not be resent.")
     return {"message": "Invitation resent successfully."}
 
-@router.delete("/invites/{invite_id}", name="delete_invite", tags=["Invitations"])
+@router.delete("/invites/{invite_id}", name="delete_invite", tags=["Invitations with MinIO (Authentication Required)"])
 async def delete_invitation(
     invite_id: UUID,
     current_user: User = Depends(get_current_user),
