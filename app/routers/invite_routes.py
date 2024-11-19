@@ -142,3 +142,28 @@ async def resend_invitation(
     if not success:
         raise HTTPException(status_code=404, detail="Invitation not found or could not be resent.")
     return {"message": "Invitation resent successfully."}
+
+@router.delete("/invites/{invite_id}", name="delete_invite", tags=["Invitations"])
+async def delete_invitation(
+    invite_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Delete an invitation by ID. The authenticated user must be the creator of the invite.
+    """
+    try:
+        # Check if the invitation exists and belongs to the user
+        deleted = await InviteService.delete_invitation(
+            session=db,
+            invite_id=invite_id,
+            user_id=current_user["user_uuid"]
+        )
+
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Invitation not found or you are not authorized to delete it.")
+
+        return {"message": "Invitation deleted successfully."}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={e})

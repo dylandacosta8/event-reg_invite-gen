@@ -189,3 +189,31 @@ class InviteService:
             logger.error(f"Error updating invitation with ID {invite_id}: {e}")
             await session.rollback()
             return None
+        
+    @classmethod
+    async def delete_invitation(cls, session: AsyncSession, invite_id: UUID, user_id: UUID) -> bool:
+        """
+        Delete an invitation if it exists and belongs to the given user.
+        :param session: Database session.
+        :param invite_id: ID of the invitation to delete.
+        :param user_id: ID of the user attempting to delete the invitation.
+        :return: True if the invitation was deleted, False otherwise.
+        """
+        try:
+            # Check if the invitation exists and belongs to the user
+            query = select(Invitation).where(Invitation.id == invite_id, Invitation.user_id == user_id)
+            result = await session.execute(query)
+            invitation = result.scalar_one_or_none()
+
+            if not invitation:
+                return False  # Invitation not found or does not belong to the user
+
+            # Delete the invitation
+            await session.delete(invitation)
+            await session.commit()
+            return True
+
+        except Exception as e:
+            logger.error(f"Error deleting invitation: {e}")
+            await session.rollback()
+            return False
