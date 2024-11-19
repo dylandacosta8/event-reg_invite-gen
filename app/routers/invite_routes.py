@@ -8,6 +8,7 @@ from app.models.user_model import User
 from app.services.email_service import EmailService
 from settings.config import settings
 from base64 import urlsafe_b64decode
+from uuid import UUID
 
 router = APIRouter()
 
@@ -37,7 +38,7 @@ async def create_invite(
 
 @router.put("/invites/{invite_id}", response_model=InviteResponse, name="update_invite", tags=["Invitations"])
 async def update_invite(
-    invite_id: int,
+    invite_id: UUID,
     invite_data: InviteUpdate,
     db: AsyncSession = Depends(get_db)
 ):
@@ -45,7 +46,7 @@ async def update_invite(
     Update an invitation by ID.
     """
     updated_invite = await InviteService.update_invite(
-        db=db,
+        session=db,
         invite_id=invite_id,
         update_data=invite_data.dict(exclude_unset=True)
     )
