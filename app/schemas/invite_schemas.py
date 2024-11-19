@@ -23,7 +23,7 @@ class InviteResponse(BaseModel):
     used_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InviteListResponse(BaseModel):
     items: List[InviteResponse] = Field(..., example=[
