@@ -13,7 +13,7 @@ class InviteUpdate(BaseModel):
     used: Optional[bool] = Field(None, example=True)
 
 class InviteResponse(BaseModel):
-    id: int
+    id: UUID
     invitee_email: str
     invite_code: str
     nickname: str
