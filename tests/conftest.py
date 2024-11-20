@@ -59,10 +59,6 @@ def minio_client():
     )
 
 @pytest.fixture
-def app_client():
-    return TestClient(app)
-
-@pytest.fixture
 def email_service():
     # Assuming the TemplateManager does not need any arguments for initialization
     template_manager = TemplateManager()

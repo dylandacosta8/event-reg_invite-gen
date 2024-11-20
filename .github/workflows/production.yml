@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10.12] # Define Python versions here
+        python-version: [3.10.12]
     services:
       postgres:
         image: postgres:latest
@@ -22,6 +22,14 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      minio:
+        image: lazybit/minio
+        env:
+          MINIO_ROOT_USER: admin
+          MINIO_ROOT_PASSWORD: password
+        ports:
+          - 9000:9000
+          - 9001:9001
     steps:
       - uses: actions/checkout@v4
       
@@ -43,15 +51,41 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 && break || sleep 5;
+          done
+
+      - name: Wait for MinIO
+        run: |
+          for i in {1..10}; do
+            curl -f http://localhost:9000/minio/health/live && break || sleep 5;
+          done
+      
+      - name: Create MinIO bucket for testing
+        env:
+          MINIO_ROOT_USER: admin
+          MINIO_ROOT_PASSWORD: password
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x ./mc
+          ./mc alias set minio http://127.0.0.1:9000 admin password
+          ./mc mb minio/qr-codes
+          ./mc policy set public minio/qr-codes
+
       - name: Run tests with Pytest
         env:
-          DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/myappdb  # Configure the DATABASE_URL environment variable for tests
+          MINIO_ROOT_USER: admin
+          MINIO_ROOT_PASSWORD: password
+          DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/myappdb
+          MINIO_URL: localhost:9000
         run: pytest
 
   build-and-push-docker:
     needs: test
     runs-on: ubuntu-latest
-    environment: production
+    environment: dev
     steps:
       - uses: actions/checkout@v4
       
@@ -68,8 +102,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: dylan08/is601_final:${{ github.sha }} # Uses the Git SHA for tagging
-          platforms: linux/amd64,linux/arm64 # Multi-platform support
+          tags: dylan08/is601_final:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=dylan08/is601_final:cache
           cache-to: type=inline,mode=max
           
@@ -78,6 +112,6 @@ jobs:
         with:
           image-ref: 'dylan08/is601_final:${{ github.sha }}'
           format: 'table'
-          exit-code: '0' # Pass the job if vulnerabilities are found
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
