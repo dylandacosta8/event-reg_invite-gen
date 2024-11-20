@@ -68,9 +68,11 @@ jobs:
           MINIO_ROOT_USER: admin
           MINIO_ROOT_PASSWORD: password
         run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x ./mc
           mc alias set local http://127.0.0.1:9000 admin password
-          mc mb local/test-bucket
-          mc policy set public local/test-bucket
+          mc mb local/qr-codes
+          mc policy set public local/qr-codes
 
       - name: Validate environment variables
         run: |
