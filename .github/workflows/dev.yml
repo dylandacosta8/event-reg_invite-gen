@@ -74,12 +74,6 @@ jobs:
           ./mc mb local/qr-codes
           ./mc policy set public local/qr-codes
 
-      - name: Validate environment variables
-        run: |
-          if [ -z "$DATABASE_URL" ] || [ -z "$MINIO_ROOT_USER" ]; then
-            echo "Required environment variables are missing!" && exit 1;
-          fi
-
       - name: Run tests with Pytest
         env:
           MINIO_ROOT_USER: admin
@@ -117,6 +111,6 @@ jobs:
         with:
           image-ref: 'dylan08/is601_final:${{ github.sha }}'
           format: 'table'
-          exit-code: '0'
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
