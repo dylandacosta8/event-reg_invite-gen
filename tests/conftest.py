@@ -17,7 +17,7 @@ Fixtures:
 from builtins import Exception, range, str
 from datetime import timedelta
 from unittest.mock import AsyncMock, patch
-from uuid import uuid4
+import uuid
 
 # Third-party imports
 import pytest
@@ -38,6 +38,9 @@ from app.utils.template_manager import TemplateManager
 from app.services.email_service import EmailService
 from app.services.jwt_service import create_access_token
 
+#MinIO Imports
+from minio import Minio
+
 fake = Faker()
 
 settings = get_settings()
@@ -46,6 +49,18 @@ engine = create_async_engine(TEST_DATABASE_URL, echo=settings.debug)
 AsyncTestingSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 AsyncSessionScoped = scoped_session(AsyncTestingSessionLocal)
 
+@pytest.fixture
+def minio_client():
+    return Minio(
+        endpoint=settings.minio_url,
+        access_key="admin",
+        secret_key="password",
+        secure=False
+    )
+
+@pytest.fixture
+def app_client():
+    return TestClient(app)
 
 @pytest.fixture
 def email_service():
