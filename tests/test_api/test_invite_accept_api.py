@@ -32,7 +32,7 @@ async def test_accept_invite_endpoint(async_client, db_session, verified_user, e
     # Assertions
     assert response.status_code == 307  # Redirect
     assert "location" in response.headers  # Redirect URL should be present
-    assert response.headers["location"] == "settings.redirect_base_url"
+    assert response.headers["location"] == str(settings.redirect_base_url)
 
     # Verify the invitation is marked as used
     used_invitation = await InviteService.get_invitation_by_code(db_session, invitation.invite_code)

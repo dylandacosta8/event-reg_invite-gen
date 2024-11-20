@@ -10,6 +10,6 @@ async def test_get_invitation(db_session, verified_user, email_service):
         nickname=verified_user.nickname,
         email_service=email_service
     )
-    retrieved_invitation = await InviteService.get_invitation_by_code(db_session, invitation.invite_code, verified_user.id)
+    retrieved_invitation = await InviteService.get_invitation_by_code(db_session, invitation.invite_code)
     assert retrieved_invitation is not None
     assert retrieved_invitation.invite_code == invitation.invite_code
