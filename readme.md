@@ -1,53 +1,91 @@
+### <h1 align=center>IS601 Final Project</h1>
+### <h2 align=center>Feature: QR Code Generation User Invites with MinIO </h2> 
+<div align=center>
 
+This repository includes:
+<b>1 new Feature
+5+ QA Issues
+10+ new Test Cases
+</b>
 
-# The User Management System Final Project: Your Epic Coding Adventure Awaits! 🎉✨🔥
+</div>
 
-## Introduction: Buckle Up for the Ride of a Lifetime 🚀🎬
+---
+<div align=>
 
-Welcome to the User Management System project - an epic open-source adventure crafted by the legendary Professor Keith Williams for his rockstar students at NJIT! 🏫👨‍🏫⭐ This project is your gateway to coding glory, providing a bulletproof foundation for a user management system that will blow your mind! 🤯 You'll bridge the gap between the realms of seasoned software pros and aspiring student developers like yourselves. 
+### The submission meets the following goals:
 
-### [Instructor Video - Project Overview and Tips](https://youtu.be/gairLNAp6mA) 🎥
+1. <b>Implements a NEW feature</b> into the existing codebase.
+2. <b>Fixed 5+ QA Issues/Bugs</b> across the codebase.
+3. <b>Wrote 10+ NEW Tests</b> for the new feature implemented.
+4. Includes a <b>Reflection Document</b> for the course.
+5. Includes <b>Extensive Documentation</b> of the feature, bugs and test cases implemented.
 
-- [Introduction to the system features and overview of the project - please read](system_documentation.md) 📚
-- [Project Setup Instructions](setup.md) ⚒️
-- [Features to Select From](features.md) 🛠️
-- [About the Project](about.md)🔥🌟
+</div>
 
-## Goals and Objectives: Unlock Your Coding Superpowers 🎯🏆🌟
+---
+### Course Reflection Document - <a href="https://docs.google.com/document/d/1ouE42CfAX-04u_KONLJEpqo6GNTmMJ4f-0BwwHU069M/edit?usp=sharing">here</a>
 
-Get ready to ascend to new heights with this legendary project:
+---
+### QR Code Generation User Invites with MinIO - <a href="documentation/feature.md">here</a>
 
-1. **Practical Experience**: Dive headfirst into a real-world codebase, collaborate with your teammates, and contribute to an open-source project like a seasoned pro! 💻👩‍💻🔥
-2. **Quality Assurance**: Develop ninja-level skills in identifying and resolving bugs, ensuring your code quality and reliability are out of this world. 🐞🔍⚡
-3. **Test Coverage**: Write additional tests to cover edge cases, error scenarios, and important functionalities - leave no stone unturned and no bug left behind! ✅🧪🕵️‍♂️
-4. **Feature Implementation**: Implement a brand new, mind-blowing feature and make your epic mark on the project, following best practices for coding, testing, and documentation like a true artisan. ✨🚀🎆
-5. **Collaboration**: Foster teamwork and collaboration through code reviews, issue tracking, and adhering to contribution guidelines - teamwork makes the dream work, and together you'll conquer worlds! 🤝💪🌍
-6. **Industry Readiness**: Prepare for the software industry by working on a project that simulates real-world development scenarios - level up your skills to super hero status  and become an unstoppable coding force! 🔝🚀🏆⚡
+---
+### QA Issues/Bugs - <a href="documentation/bugs.md">here</a>
 
-## Submission and Grading: Your Chance to Shine 📝✏️📈
+---
+### Test Cases - <a href="documentation/test.md">here</a>
 
-1. **Reflection Document**: Submit a 1-2 page Word document reflecting on your learnings throughout the course and your experience working on this epic project. Include links to the closed issues for the **5 QA issues, 10 NEW tests, and 1 Feature** you'll be graded on. Make sure your project successfully deploys to DockerHub and include a link to your Docker repository in the document - let your work speak for itself! 📄🔗💥
+---
+### Getting the Project Setup:
+<br>
 
-2. **Commit History**: Show off your consistent hard work through your commit history like a true coding warrior. **Projects with less than 10 commits will get an automatic 0 - ouch!** 😬⚠️ A significant part of your project's evaluation will be based on your use of issues, commits, and following a professional development process like a boss - prove your coding prowess! 💻🔄🔥
+* <b>Clone the repository to your local machine</b>
 
-3. **Deployability**: Broken projects that don't deploy to Dockerhub or pass all the automated tests on GitHub actions will face point deductions - nobody likes a buggy app! 🐞☠️ Show the world your flawless coding skills!
+```
+git clone https://github.com/dylandacosta8/is601_final.git
+```
 
-## Managing the Project Workload: Stay Focused, Stay Victorious ⏱️🧠⚡
+* <b>Change directory to the project</b>
 
-This project requires effective time management and a well-planned strategy, but fear not - you've got this! Follow these steps to ensure a successful (and sane!) project outcome:
+```
+cd is601_final
+```
 
-1. **Select a Feature**: [Choose a feature](features.md) from the provided list of additional improvements that sparks your interest and aligns with your goals like a laser beam. ✨⭐🎯 This is your chance to shine!
+* <b>Install and Setup Docker [Mandatory]</b>
+    <br>
+    1. <u>For Linux users</u> - Make sure Docker is installed using your choice of installer for your distribution. <b> > <a href="https://docs.docker.com/engine/install/"> Official Documentation </a> < </b>
+    2. <u>For Mac/Windows users</u> - Make sure Docker Desktop is installed and running. <b> > <a href="https://docs.docker.com/desktop/"> Official Documentation </a> < </b>
+    <br>
 
-2. **Quality Assurance (QA)**: Thoroughly test the system's major functionalities related to your chosen feature and identify at least 5 issues or bugs like a true detective. Create GitHub issues for each identified problem, providing detailed descriptions and steps to reproduce - the more detail, the merrier! 🔍🐞🕵️‍♀️ Leave no stone unturned!
+* <b>Start your containerized environment</b>
 
-3. **Test Coverage Improvement**: Review the existing test suite and identify gaps in test coverage like a pro. Create 10 additional tests to cover edge cases, error scenarios, and important functionalities related to your chosen feature. Focus on areas such as user registration, login, authorization, and database interactions. Simulate the setup of the system as the admin user, then creating users, and updating user accounts - leave no stone unturned, no bug left behind! ✅🧪🔍🔬 Become the master of testing!
+```
+docker compose up --build
+```
 
-4. **New Feature Implementation**: Implement your chosen feature, following the project's coding practices and architecture like a coding ninja. Write appropriate tests to ensure your new feature is functional and reliable like a rock. Document the new feature, including its usage, configuration, and any necessary migrations - future you will thank you profusely! 🚀✨📝👩‍💻⚡ Make your mark on this project!
+* <b>Running tests using pytest</b>
 
-5. **Maintain a Working Main Branch**: Throughout the project, ensure you always have a working main branch deploying to Docker like a well-oiled machine. This will prevent any last-minute headaches and ensure a smooth submission process - no tears allowed, only triumphs! 😊🚢⚓ Stay focused, stay victorious!
+```
+docker compose exec fastapi pytest
+```
 
-Remember, it's more important to make something work reliably and be reasonably complete than to implement an overly complex feature. Focus on creating a feature that you can build upon or demonstrate in an interview setting - show off your skills like a rockstar! 💪🚀🎓
+* <b>Access various components</b>
+    <br>
+    1. <b>PgAdmin</b>
+    ```
+    http://localhost:5050
+    ```
+    2. <b>FastAPI Swagger UI</b>
+    ```
+    http://localhost/docs
+    ```
+    3. <b>MinIO UI</b>
+    ```
+    http://localhost:9001
+    ```
 
-Don't forget to always have a working main branch deploying to Docker at all times. If you always have a working main branch, you will never be in jeopardy of receiving a very disappointing grade :-). Keep that main branch shining bright!
+<b>Note:</b>In case you receive an error stating tables do not exist while running tests please run the following command
 
-Let's embark on this epic coding adventure together and conquer the world of software engineering! You've got this, coding rockstars! 🚀🌟✨
+```
+docker compose exec fastapi alembic upgrade head
+```
