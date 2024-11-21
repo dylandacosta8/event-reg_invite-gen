@@ -4,6 +4,10 @@
 The User Invitation System enables secure and efficient sharing of invitation links via QR codes. This system leverages MinIO for QR code storage and retrieval, ensuring scalability and reliability in managing generated QR codes. Additionally, it supports CRUD operations (BREAD) for invitations and follows HATEOAS principles for seamless API navigation.
 
 ---
+
+## GitHub Issue Link - <a href="https://github.com/dylandacosta8/is601_final/issues/6">here</a>
+
+---
 <div align=center>
 
 ## Screenshots

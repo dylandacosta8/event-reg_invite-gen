@@ -4,6 +4,7 @@
 
 ### 1. **Test Invitation Creation Service**
 **Description**: Verify that an invitation can be successfully created with a unique invite code and QR code.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/21">here</a>
 
 #### Steps:
 1. Call the `POST /invitations` endpoint with valid invitee details.
@@ -16,6 +17,7 @@
 
 ### 2. **Test QR Code Storage in MinIO**
 **Description**: Ensure the generated QR code is correctly stored in the MinIO bucket.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/33">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -29,6 +31,7 @@
 
 ### 3. **Test Invitation Acceptance Service - Positive**
 **Description**: Validate that an invitation can be accepted with a valid invite code and nickname.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/35">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -37,14 +40,11 @@
    - The response redirects to the specified URL.
    - The invitation status is updated to "used."
 
-#### Negative Test Cases:
-- **Invalid Invite Code**: Assert that a `400 Bad Request` is returned.
-- **Mismatched Nickname**: Assert that a `400 Bad Request` is returned.
-
 ---
 
 ### 4. **Test Resending Invitations Service - Positive**
 **Description**: Verify that an invitation email can be resent.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/29">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -57,6 +57,7 @@
 
 ### 5. **Test Invitation Updates Service**
 **Description**: Ensure invitation details can be updated, such as the invitee's email or expiration date.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/27">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -70,6 +71,7 @@
 
 ### 6. **Test Invitation Acceptance Service - Negative**
 **Description**: Validate that an invitation can be decline with an invalid invite code and nickname.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/35">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -81,6 +83,7 @@
 
 ### 7. **Test Deleting Invitations Service**
 **Description**: Validate that an invitation can be deleted, and its QR code is removed from MinIO.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/31">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -94,6 +97,7 @@
 
 ### 8. **Test Listing Invitations by Code Service**
 **Description**: Ensure that invitation details can be retrieved using the invite code.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/23">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -106,6 +110,7 @@
 
 ### 9. **Test Listing All Invitations for a User Service**
 **Description**: Verify that all invitations for a user can be retrieved, with pagination support.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/25">here</a>
 
 #### Steps:
 1. Create multiple invitations for a user.
@@ -119,6 +124,7 @@
 
 ### 10. **Test Invitation Acceptance Router - Positive**
 **Description**: Validate that an invitation can be accepted with a valid invite code and nickname.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/37">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -131,6 +137,7 @@
 
 ### 11. **Test Invitation Acceptance Router - Negative**
 **Description**: Validate that an invitation can be decline with an invalid invite code and nickname.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/37">here</a>
 
 #### Steps:
 1. Create an invitation.
@@ -141,7 +148,8 @@
 ---
 
 ### 12. **Test Resending Invitations Service - Negative**
-**Description**: Verify that an invitation email can be resent..
+**Description**: Verify that an invitation email can be resent.
+**Issue Link**: <a href="https://github.com/dylandacosta8/is601_final/issues/29">here</a>
 
 #### Steps:
 1. Create an invitation.
