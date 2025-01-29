@@ -1,4 +1,3 @@
-### <h1 align=center>IS601 Final Project</h1>
 ### <h2 align=center>Feature: QR Code Generation User Invites with MinIO </h2> 
 <div align=center>
 
